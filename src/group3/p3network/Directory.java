@@ -1,5 +1,6 @@
 package group3.p3network;
 
+import java.io.File;
 import java.nio.file.*;
 
 public class Directory {
@@ -60,6 +61,10 @@ public class Directory {
             }
 
             return result;
+        }
+
+        public String getCurrent() {
+            return new File("").getAbsolutePath();
         }
     }
 }
