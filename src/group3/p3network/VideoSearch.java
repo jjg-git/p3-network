@@ -10,7 +10,7 @@ public class VideoSearch {
 
         ArrayList<Path> gatheredVideoFiles = new ArrayList<>();
 
-        for (String result : new File(".").list()) {
+        for (String result : new File(path.getCurrentDirectory()).list()) {
             System.out.println(result);
         }
 
