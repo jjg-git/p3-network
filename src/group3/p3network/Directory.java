@@ -26,45 +26,4 @@ public class Directory {
     public String getCurrentDirectory() {
         return currentDirectory;
     }
-
-    private class CheckDirectory {
-        public boolean check(String path) {
-            // Check if it's a valid format directory
-            // Source: https://regex101.com/r/xCywRh/1
-
-            if (!(path.matches(".+((?=\\\\)|(?=\\/)/?)"))) {
-                return false;
-            }
-
-            if (!Files.isDirectory(FileSystems.getDefault().getPath(path))) {
-                return false;
-            }
-
-            return true;
-        }
-    }
-
-    private static class WorkingDirectory {
-        private static volatile WorkingDirectory instance;
-        private static final Object lock = new Object();
-
-        public static WorkingDirectory getInstance() {
-            WorkingDirectory result = instance;
-
-            if (result == null) {
-                synchronized (lock) {
-                    result = instance;
-                    if (result == null) {
-                        instance = result = new WorkingDirectory();
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public String getCurrent() {
-            return new File("").getAbsolutePath();
-        }
-    }
 }
