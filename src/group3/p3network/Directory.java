@@ -14,6 +14,13 @@ public class Directory {
         currentDirectory = WorkingDirectory.getInstance().getCurrent();
     }
 
+    private void setCurrentDirectory(String path) {
+        if (!(new CheckDirectory()).check(path))
+            return;
+
+        currentDirectory = path;
+    }
+
     public Directory(String path) {
         if (!(new CheckDirectory()).check(path)) {
             setToWorkingDirectory();
