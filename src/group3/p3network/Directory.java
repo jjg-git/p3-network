@@ -22,6 +22,10 @@ public class Directory {
         currentDirectory = path;
     }
 
+    public String getCurrentDirectory() {
+        return currentDirectory;
+    }
+
     private class CheckDirectory {
         public boolean check(String path) {
             // Check if it's a valid format directory
