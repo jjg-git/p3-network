@@ -7,7 +7,6 @@ public class Video {
     long size;
     String filename;
     Directory directory;
-    byte[] hash;
 
     public Video(String filename) {
         this.videoFile = new File(filename);
@@ -21,9 +20,7 @@ public class Video {
 
         try {
             readVideoFile();
-        } catch (FileNotFoundException notFound) {
-            System.err.println(notFound.getMessage());
-        } catch (IOException e) {
+        }catch (IOException e) {
             System.err.println(e.getMessage());
         }
 
