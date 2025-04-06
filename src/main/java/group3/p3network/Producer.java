@@ -8,6 +8,14 @@ import java.util.concurrent.Executors;
 
 public class Producer {
     private final Server server;
+
+    private void start(int producerThreads) {
+        final int port = 50051;
+
+        ExecutorService executor =
+            Executors.newFixedThreadPool(producerThreads);
+    }
+
     public static void main(String[] args){
     }
 
