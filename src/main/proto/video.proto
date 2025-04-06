@@ -7,11 +7,12 @@ option objc_class_prefix = "VP";
 
 
 service SendingVideoService {
+  rpc ListVideo(Command) returns (stream VideoInfo);
   rpc SendVideo(VideoInfo) returns (stream VideoData);
 }
 
-message StatusMessage {
-  string status = 1;
+message Command {
+  string command = 1;
 }
 
 message VideoInfo {
