@@ -56,7 +56,11 @@ public class Producer {
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args)
+        throws IOException, InterruptedException {
+        final Producer producer = new Producer();
+        producer.start(2);
+        producer.blockUntilShutdown();
     }
 
     private static class SendingVideoService
