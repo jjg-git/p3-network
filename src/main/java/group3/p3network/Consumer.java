@@ -13,6 +13,10 @@ public class Consumer {
     }
 
     public void test() {
+        VideoInfo info = VideoInfo.newBuilder()
+            .setFilesize(69)
+            .setFilename("gege_akutami.txt")
+            .build();
     }
 
     public static void main(String[] args) throws InterruptedException {
