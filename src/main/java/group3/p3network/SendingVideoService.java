@@ -12,7 +12,7 @@ import java.util.List;
 public class SendingVideoService
     extends SendingVideoServiceGrpc.SendingVideoServiceImplBase {
 
-    private String videosPath = "server-dir/";
+    private final String videosPath = "server-dir/";
 
     @Override
     public void sendVideo(
