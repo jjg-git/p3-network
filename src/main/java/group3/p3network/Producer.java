@@ -3,7 +3,6 @@ package group3.p3network;
 import io.grpc.Grpc;
 import io.grpc.InsecureServerCredentials;
 import io.grpc.Server;
-import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -61,16 +60,5 @@ public class Producer {
         final Producer producer = new Producer();
         producer.start(2);
         producer.blockUntilShutdown();
-    }
-
-    private static class SendingVideoService
-        extends SendingVideoServiceGrpc.SendingVideoServiceImplBase {
-        @Override
-        public void sendVideo(
-            VideoInfo request,
-            StreamObserver<VideoData> responseObserver
-        ) {
-            responseObserver.onCompleted();
-        }
     }
 }
