@@ -3,11 +3,10 @@ package group3.p3network;
 import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class SendingVideoService
     extends SendingVideoServiceGrpc.SendingVideoServiceImplBase {
@@ -19,19 +18,17 @@ public class SendingVideoService
         VideoInfo request,
         StreamObserver<VideoData> responseObserver
     ) {
-        List<Video> listOfVideos =
-            new VideoSearch(new Directory(videosPath)).gatherVideos();
+        VideoSearch videoSearch =
+            new VideoSearch(new Directory(videosPath));
 
-        listOfVideos.forEach(System.out::println);
-        File firstVideoFile = listOfVideos.get(0).getVideoFile();
+        Map<String, Video> videoMap = videoSearch.gatherVideos();
+        Video video = videoMap.get(request.getFilename());
 
-        System.out.println(firstVideoFile);
-        System.out.println(firstVideoFile.length());
-
-        FileInputStream inputStream = null;
+        System.out.println("Sending " + video.getVideoFile() + "...");
+        FileInputStream inputStream;
         try {
             inputStream =
-                new FileInputStream(firstVideoFile);
+                new FileInputStream(video.getVideoFile());
 
             byte[] bytesStream = new byte[2048];
 
