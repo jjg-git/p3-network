@@ -50,6 +50,12 @@ public class Producer {
         }
     }
 
+    private void blockUntilShutdown() throws InterruptedException {
+        if (server != null) {
+            server.awaitTermination();
+        }
+    }
+
     public static void main(String[] args){
     }
 
