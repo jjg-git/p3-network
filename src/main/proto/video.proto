@@ -21,6 +21,5 @@ message VideoInfo {
 }
 
 message VideoData {
-  string filename = 1;
   bytes data = 2;
 }
