@@ -3,10 +3,10 @@ package group3.p3network;
 import java.io.*;
 
 public class Video {
-    File videoFile;
-    long size;
-    String filename;
-    Directory directory;
+    private File videoFile;
+    private long size;
+    private String filename;
+    private Directory directory;
 
     public Video(String filename) {
         this.videoFile = new File(filename);
@@ -21,6 +21,22 @@ public class Video {
         // this.directory = new Directory(this.videoFile.getParent());
 
         System.out.println(this);
+    }
+
+    public File getVideoFile() {
+        return videoFile;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public Directory getDirectory() {
+        return directory;
     }
 
     @Override
