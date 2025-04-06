@@ -10,6 +10,15 @@ public class Directory {
         setToWorkingDirectory();
     }
 
+    public Directory(String path) {
+        if (!(new CheckDirectory()).check(path)) {
+            setToWorkingDirectory();
+            return;
+        }
+
+        currentDirectory = path;
+    }
+
     private void setToWorkingDirectory() {
         currentDirectory = WorkingDirectory.getInstance().getCurrent();
     }
@@ -17,15 +26,6 @@ public class Directory {
     private void setCurrentDirectory(String path) {
         if (!(new CheckDirectory()).check(path))
             return;
-
-        currentDirectory = path;
-    }
-
-    public Directory(String path) {
-        if (!(new CheckDirectory()).check(path)) {
-            setToWorkingDirectory();
-            return;
-        }
 
         currentDirectory = path;
     }
