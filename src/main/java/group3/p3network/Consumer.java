@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
@@ -18,13 +17,15 @@ public class Consumer {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
-    public void getFiles(ArrayList<String> videos) {
+    public void getFiles(Iterator<VideoInfo> videos) {
         Iterator<VideoData> streamedData;
-        for (String videoFilename : videos) {
-            VideoInfo info = VideoInfo.newBuilder().setFilename(videoFilename).build();
+        for (Iterator<VideoInfo> it = videos; it.hasNext(); ) {
+            VideoInfo info = it.next();
+            System.out.println("Reading " + info.getFilename() +
+                "(" + info.getFilesize() + ")...");
 
             try {
-                FileOutputStream os = new FileOutputStream(videoFilename);
+                FileOutputStream os = new FileOutputStream(info.getFilename());
 
                 streamedData = blockingStub.sendVideo(info);
                 for (int i = 0; streamedData.hasNext(); i++) {
@@ -43,16 +44,8 @@ public class Consumer {
         }
     }
 
-    public ArrayList<String> getVideos() {
-        ArrayList<String> listFilenames = new ArrayList();
-
-        blockingStub.listVideo(Commands.ListVideos).forEachRemaining(
-            videoInfo -> {
-                listFilenames.add(videoInfo.getFilename());
-            }
-        );
-
-        return listFilenames;
+    public Iterator<VideoInfo> getVideos() {
+        return blockingStub.listVideo(Commands.ListVideos);
     }
 
     public static void main(String[] args) throws InterruptedException {
