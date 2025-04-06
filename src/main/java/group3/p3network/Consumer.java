@@ -31,6 +31,18 @@ public class Consumer {
         }
     }
 
+    public ArrayList<String> getVideos() {
+        ArrayList<String> listFilenames = new ArrayList();
+
+        blockingStub.listVideo(Commands.ListVideos).forEachRemaining(
+            videoInfo -> {
+                listFilenames.add(videoInfo.getFilename());
+            }
+        );
+
+        return listFilenames;
+    }
+
     public static void main(String[] args) throws InterruptedException {
         String target = "localhost:50051";
         if (args.length > 0) {
