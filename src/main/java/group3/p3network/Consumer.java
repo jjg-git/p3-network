@@ -79,7 +79,8 @@ public class Consumer {
 
         try {
             Consumer consumer = new Consumer(channel);
-            consumer.test();
+            // consumer.getVideos().forEach(System.out::println);
+            // consumer.getFiles(consumer.getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
