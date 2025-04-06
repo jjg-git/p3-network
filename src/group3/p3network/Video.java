@@ -10,26 +10,17 @@ public class Video {
 
     public Video(String filename) {
         this.videoFile = new File(filename);
+
         try {
             this.size = this.videoFile.length();
         } catch (SecurityException e) {
             System.err.println(e.getMessage());
         }
-        this.filename = this.videoFile.getName();
-        this.directory = new Directory();
 
-        try {
-            readVideoFile();
-        }catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        this.filename = this.videoFile.getName();
+        this.directory = new Directory(this.videoFile.getPath());
 
         System.out.println(this);
-    }
-
-    private void readVideoFile() throws IOException {
-        FileInputStream inputStream = new FileInputStream(videoFile);
-        inputStream.close();
     }
 
     @Override
