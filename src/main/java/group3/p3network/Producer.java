@@ -8,6 +8,7 @@ import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Producer {
     private Server server;
@@ -30,9 +31,23 @@ public class Producer {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                super.run();
+                try {
+                    Producer.this.stop();
+                } catch (InterruptedException e) {
+                    if (server != null) {
+                        server.shutdownNow();
+                    }
+                } finally {
+                    executor.shutdown();
+                }
             }
         });
+    }
+
+    private void stop() throws InterruptedException {
+        if (server != null) {
+            server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
+        }
     }
 
     public static void main(String[] args){
