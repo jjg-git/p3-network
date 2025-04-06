@@ -56,20 +56,19 @@ public class SendingVideoService
     @Override
     public void listVideo(Command request, StreamObserver<VideoInfo> responseObserver) {
         if (request.equals(Commands.ListVideos)) {
-            System.out.println("very cool");
-        }
+            for (Video video :
+                new VideoSearch(new Directory(videosPath)).gatherVideos()){
+                String fileName =
+                    video.getDirectory().getCurrentDirectory() + video.getFilename();
+                long fileSize = video.getSize();
 
-        for (Video video :
-            new VideoSearch(new Directory(videosPath)).gatherVideos()){
-            String fileName = video.getFilename();
-            long fileSize = video.getSize();
-
-            responseObserver.onNext(
-                VideoInfo.newBuilder()
-                    .setFilename(fileName)
-                    .setFilesize(fileSize)
-                    .build()
-            );
+                responseObserver.onNext(
+                    VideoInfo.newBuilder()
+                        .setFilename(fileName)
+                        .setFilesize(fileSize)
+                        .build()
+                );
+            }
         }
 
         responseObserver.onCompleted();
