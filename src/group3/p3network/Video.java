@@ -28,6 +28,8 @@ public class Video {
         return "Video{" +
             "videoFile=" + videoFile +
             ", size=" + size +
+            ", filename=" + filename +
+            ", path=" + videoFile.getPath() +
             '}';
     }
 }
