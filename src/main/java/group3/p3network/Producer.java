@@ -17,6 +17,7 @@ public class Producer {
 
         ExecutorService executor =
             Executors.newFixedThreadPool(producerThreads);
+
         server = Grpc.newServerBuilderForPort(
             port,
             InsecureServerCredentials.create()
@@ -25,6 +26,13 @@ public class Producer {
             .addService(new SendingVideoService())
             .build()
             .start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                super.run();
+            }
+        });
     }
 
     public static void main(String[] args){
