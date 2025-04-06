@@ -43,8 +43,6 @@ public class SendingVideoService
             }
 
             inputStream.close();
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
