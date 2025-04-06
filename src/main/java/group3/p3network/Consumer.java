@@ -1,8 +1,9 @@
 package group3.p3network;
 
-import io.grpc.Grpc;
-import io.grpc.InsecureChannelCredentials;
-import io.grpc.ManagedChannel;
+import io.grpc.*;
+
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 public class Consumer {
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
@@ -17,6 +18,17 @@ public class Consumer {
             .setFilesize(69)
             .setFilename("gege_akutami.txt")
             .build();
+
+        Iterator<VideoData> streamedData;
+        try {
+            streamedData = blockingStub.sendVideo(info);
+            for (int i = 0; streamedData.hasNext(); i++) {
+                VideoData data = streamedData.next();
+                System.out.println("[" + i + "]: " + data.getData());
+            }
+        } catch (StatusRuntimeException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -40,6 +52,7 @@ public class Consumer {
 
         try {
             Consumer consumer = new Consumer(channel);
+            consumer.test();
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
