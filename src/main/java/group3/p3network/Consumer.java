@@ -11,6 +11,10 @@ public class Consumer {
     public Consumer(ManagedChannel channel) {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
+
+    public void test() {
+    }
+
     public static void main(String[] args) throws InterruptedException {
         String target = "localhost:50051";
         if (args.length > 0) {
