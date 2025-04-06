@@ -1,8 +1,5 @@
 package group3.p3network;
 
-import java.io.File;
-import java.nio.file.*;
-
 public class Directory {
     private String currentDirectory;
 
