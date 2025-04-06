@@ -18,9 +18,9 @@ public class Video {
         }
 
         this.filename = this.videoFile.getName();
-        // this.directory = new Directory(this.videoFile.getParent());
+        this.directory = new Directory(this.videoFile.getParent());
 
-        System.out.println(this);
+        // System.out.println(this);
     }
 
     public File getVideoFile() {
@@ -42,6 +42,7 @@ public class Video {
     @Override
     public String toString() {
         return "Video{" +
+            "directory=" + directory.getCurrentDirectory() +
             "videoFile=" + videoFile +
             ", size=" + size +
             ", filename=" + filename +
