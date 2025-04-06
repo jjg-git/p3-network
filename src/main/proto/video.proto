@@ -1,7 +1,13 @@
 syntax = "proto3";
 
+option java_package = "group3.p3network";
+option java_multiple_files = true;
+option java_outer_classname = "VideoProto";
+option objc_class_prefix = "VP";
+
+
 service SendingVideoService {
-  rpc SendVideo(VideoInfo) returns (stream Video);
+  rpc SendVideo(VideoInfo) returns (stream VideoData);
 }
 
 message StatusMessage {
@@ -13,6 +19,6 @@ message VideoInfo {
   int64 filesize = 2;
 }
 
-message Video {
+message VideoData {
   bytes data = 1;
 }
