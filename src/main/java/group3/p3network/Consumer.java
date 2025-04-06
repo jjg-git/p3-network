@@ -45,6 +45,9 @@ public class Consumer {
             target = args[0];
         }
 
+        System.out.println("test");
+        System.out.println(FileSystems.getDefault().getPath(""));
+
         ManagedChannel channel = Grpc.newChannelBuilder(
             target,
             InsecureChannelCredentials.create()
