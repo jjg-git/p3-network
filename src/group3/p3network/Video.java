@@ -18,7 +18,7 @@ public class Video {
         }
 
         this.filename = this.videoFile.getName();
-        this.directory = new Directory(this.videoFile.getPath());
+        // this.directory = new Directory(this.videoFile.getParent());
 
         System.out.println(this);
     }
