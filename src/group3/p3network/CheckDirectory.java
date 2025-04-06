@@ -18,8 +18,7 @@ public class CheckDirectory {
                 System.out.println("Path is not a directory!");
                 return false;
             }
-        }
-        catch (InvalidPathException e) {
+        } catch (InvalidPathException e) {
             System.out.println("Invalid path format!");
             return false;
         }
