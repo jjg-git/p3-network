@@ -2,6 +2,11 @@ package group3.p3network;
 
 import io.grpc.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
@@ -13,21 +18,28 @@ public class Consumer {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
-    public void test() {
-        VideoInfo info = VideoInfo.newBuilder()
-            .setFilesize(69)
-            .setFilename("gege_akutami.txt")
-            .build();
-
+    public void getFiles(ArrayList<String> videos) {
         Iterator<VideoData> streamedData;
-        try {
-            streamedData = blockingStub.sendVideo(info);
-            for (int i = 0; streamedData.hasNext(); i++) {
-                VideoData data = streamedData.next();
-                System.out.println("[" + i + "]: " + data.getData());
+        for (String videoFilename : videos) {
+            VideoInfo info = VideoInfo.newBuilder().setFilename(videoFilename).build();
+
+            try {
+                FileOutputStream os = new FileOutputStream(videoFilename);
+
+                streamedData = blockingStub.sendVideo(info);
+                for (int i = 0; streamedData.hasNext(); i++) {
+                    VideoData data = streamedData.next();
+                    os.write(data.getData().toByteArray());
+                }
+
+                os.close();
+            } catch (StatusRuntimeException e) {
+                System.err.println(e.getMessage());
+            } catch (FileNotFoundException e) {
+                System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
             }
-        } catch (StatusRuntimeException e) {
-            System.err.println(e.getMessage());
         }
     }
 
