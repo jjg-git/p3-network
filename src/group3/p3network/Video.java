@@ -26,6 +26,8 @@ public class Video {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+
+        System.out.println(this);
     }
 
     private void readVideoFile() throws IOException {
