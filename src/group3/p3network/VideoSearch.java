@@ -17,7 +17,7 @@ public class VideoSearch {
         ArrayList<Path> gatheredVideoFiles = new ArrayList<>();
 
         for (String result : new File(this.path.getCurrentDirectory()).list()) {
-            videos.add(new Video(result));
+            videos.add(new Video(path.getCurrentDirectory() + result));
         }
 
         return videos;
