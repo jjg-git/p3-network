@@ -4,8 +4,8 @@ import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;
 
 public class Server {
+public class Producer {
     public static void main(String[] args){
-        new VideoSearch(new Directory("server-dir/")).gatherVideos();
     }
 
     private static class SendingVideoService
@@ -15,7 +15,6 @@ public class Server {
             VideoInfo request,
             StreamObserver<VideoData> responseObserver
         ) {
-
             responseObserver.onCompleted();
         }
     }
