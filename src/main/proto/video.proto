@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+service SendingVideoService {
+  rpc sendVideo(VideoInfo) returns (stream Video);
+}
+
+message StatusMessage {
+  string status = 1;
+}
+
+message VideoInfo {
+  string filename = 1;
+  int64 filesize = 2;
+}
+
+message Video {
+  bytes data = 1;
+}
