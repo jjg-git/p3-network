@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SetupConfig {
     private int threads = 2;
@@ -95,9 +97,101 @@ public class SetupConfig {
     private Config readConfigFromFile() {
         File configFile = loadConfigFile();
 
+        try (BufferedReader reader =
+             new BufferedReader(
+                 new FileReader(configFile)
+             )
+        ){
+            String line;
+            ArrayList<String> lines = new ArrayList<>();
+            Config result;
+
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+
+            reader.close();
+
+            result = handleThisLine(lines);
+
+            if (result == null) {
+                System.err.println("File is empty!");
+            }
+
+            return result;
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
         // Didn't get to read the file...
         return null;
     }
+
+    private Config handleThisLine(ArrayList<String> lines) {
+        for (String line : lines) {
+            String[] splitLine = line.split(" ");
+
+            if (splitLine.length < 2) {
+                System.err.println(
+                    "Missing value or option in the config file"
+                );
+                return null;
+            }
+
+            String optionToCheck = splitLine[0];
+            String valueToCheck = splitLine[1];
+
+            CheckArg check = new CheckArg();
+
+            if (!check.thisOption(optionToCheck)) {
+                System.err.println("Option " + optionToCheck + " is not available!");
+                return null;
+            }
+
+            handleConfigs(optionToCheck, valueToCheck);
+        }
+
+        return new Config(
+            threads,
+            connection
+        );
+    }
+
+    private void handleConfigs(String option, String valueToParse) {
+        handleThreads(option, valueToParse);
+    }
+
+    private void handleThreads(String option, String valueToParse) {
+        if (!option.equals("threads")){
+            handleConnection(option, valueToParse);
+            return;
+        }
+        parseThreads(valueToParse);
+    }
+
+    private void handleConnection(String option, String valueToParse) {
+        if (!option.equals("connection")) {
+            return;
+        }
+
+        parseConnection(valueToParse);
+    }
+
+    private void parseThreads(String valueToParse) {
+        threads = Integer.parseInt(valueToParse);
+    }
+
+    private void parseConnection(String valueToParse) {
+        if (notConnection(valueToParse)) {
+            System.err.println(valueToParse + " is not a valid " +
+                "connection");
+            return;
+        }
+
+        connection = valueToParse;
+    }
+
+
     private static class CheckArg {
         private final HashMap<String, Object> neededOptions = new HashMap<>();
 
