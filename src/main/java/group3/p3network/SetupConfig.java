@@ -1,5 +1,6 @@
 package group3.p3network;
 
+import java.io.*;
 public class SetupConfig {
     public Config setup(String[] args) {
         Config config = null;
@@ -25,7 +26,20 @@ public class SetupConfig {
 
         return config;
     }
+    private File loadConfigFile() {
+        File configFile = new File("server-config.txt");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+                writeDefaultConfigFile(configFile);
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return configFile;
+    }
     private Config readConfigFromFile() {
+        File configFile = loadConfigFile();
 
         // Didn't get to read the file...
         return null;
