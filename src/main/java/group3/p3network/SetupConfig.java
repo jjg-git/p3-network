@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class SetupConfig {
     private int threads = 2;
     private String connection = "localhost:50051";
+    private final String filename = "producer-config.txt";
 
     public Config setup(String[] args) {
         Config config = null;
@@ -74,7 +75,7 @@ public class SetupConfig {
     }
 
     private File loadConfigFile() {
-        File configFile = new File("server-config.txt");
+        File configFile = new File(filename);
         try {
             if (!configFile.createNewFile()) {
                 writeDefaultConfigFile(configFile);
