@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
 public class SetupConfig {
+    private int threads = 2;
+    private String connection = "localhost:50051";
+
     public Config setup(String[] args) {
         Config config = null;
 
@@ -30,6 +33,16 @@ public class SetupConfig {
 
         return config;
     }
+
+    private void showHelp() {
+        System.err.println("Syntax: threads [hostname:port]\n");
+        System.err.println("    threads   number of threads to run");
+        System.err.println("    hostname  localhost or ip address in " +
+            "the format of XXX.XXX.XXX.XXX");
+        System.err.println("    port      port number");
+        System.exit(1);
+    }
+
     private boolean notConnection(String connection) {
         boolean result = false;
 
