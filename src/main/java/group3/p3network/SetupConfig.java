@@ -73,16 +73,25 @@ public class SetupConfig {
 
     private File loadConfigFile() {
         File configFile = new File("server-config.txt");
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
+        try {
+            if (!configFile.createNewFile()) {
                 writeDefaultConfigFile(configFile);
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
             }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
         return configFile;
     }
+
+    private void writeDefaultConfigFile(File configFile) {
+        try (FileWriter writer = new FileWriter(configFile)) {
+            writer.write("threads " + threads);
+            writer.write("connection " + connection);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private Config readConfigFromFile() {
         File configFile = loadConfigFile();
 
