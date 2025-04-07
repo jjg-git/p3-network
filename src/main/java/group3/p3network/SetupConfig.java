@@ -89,4 +89,16 @@ public class SetupConfig {
         // Didn't get to read the file...
         return null;
     }
+    private static class CheckArg {
+        private final HashMap<String, Object> neededOptions = new HashMap<>();
+
+        CheckArg() {
+            neededOptions.put("threads", int.class);
+            neededOptions.put("connection", String.class);
+        }
+
+        public boolean thisOption(String optionToFind) {
+            return neededOptions.containsKey(optionToFind);
+        }
+    }
 }
