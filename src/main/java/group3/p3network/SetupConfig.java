@@ -1,15 +1,13 @@
 package group3.p3network;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SetupConfig {
     private int threads = 2;
-    private String connection = "localhost:50051";
+    private int port = 50051;
     private final String filename = "producer-config.txt";
 
     public Config setup(String[] args) {
@@ -21,13 +19,16 @@ public class SetupConfig {
                 System.exit(1);
             }
 
-            if (notConnection(args[1])) {
+            String portArg = args[1];
+
+            if (!portIsAvailable(args[1])) {
+                System.err.println("Port " + portArg + " is used");
                 System.exit(1);
             }
 
             config = new Config(
                 Integer.parseInt(args[0]),
-                args[1]
+                Integer.parseInt(args[1])
             );
         }
         if (config == null) {
@@ -38,40 +39,20 @@ public class SetupConfig {
     }
 
     private void showHelp() {
-        System.err.println("Syntax: threads [hostname:port]\n");
-        System.err.println("    threads   number of threads to run");
-        System.err.println("    hostname  localhost or ip address in " +
-            "the format of XXX.XXX.XXX.XXX");
-        System.err.println("    port      port number");
+        System.err.println("Syntax: threads port\n");
+        System.err.println("    threads  number of threads to run");
+        System.err.println("    port     port number");
         System.exit(1);
     }
 
-    private boolean notConnection(String connection) {
-        boolean result = false;
-
-        if (!connection.contains(":")) {
-            return true;
-        }
-
-        String[] split = connection.split(":");
-
-        String hostname = split[0];
-        String port = split[1];
-
-        try {
-            InetAddress.getByName(hostname);
-        } catch (UnknownHostException e) {
-            System.err.println(e.getMessage());
-        }
-
+    private boolean portIsAvailable(String port) {
         try {
             new ServerSocket(Integer.parseInt(port));
-            result = true;
+            return true;
         } catch (IOException e) {
             System.err.println(e.getMessage());
+            return false;
         }
-
-        return !result;
     }
 
     private File loadConfigFile() {
@@ -89,7 +70,7 @@ public class SetupConfig {
     private void writeDefaultConfigFile(File configFile) {
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write("threads " + threads);
-            writer.write("connection " + connection);
+            writer.write("connection " + port);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -154,7 +135,7 @@ public class SetupConfig {
 
         return new Config(
             threads,
-            connection
+            port
         );
     }
 
@@ -183,13 +164,7 @@ public class SetupConfig {
     }
 
     private void parseConnection(String valueToParse) {
-        if (notConnection(valueToParse)) {
-            System.err.println(valueToParse + " is not a valid " +
-                "connection");
-            return;
-        }
-
-        connection = valueToParse;
+        port = Integer.parseInt(valueToParse);
     }
 
 
