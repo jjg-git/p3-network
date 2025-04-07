@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 public class Producer {
     private Server server;
 
-    private void start(int producerThreads) throws IOException {
-        final int port = 50051;
+    private void start(Config setting) throws IOException {
+        final int port = setting.port();
 
         ExecutorService executor =
-            Executors.newFixedThreadPool(producerThreads);
+            Executors.newFixedThreadPool(setting.threads());
 
         server = Grpc.newServerBuilderForPort(
             port,
@@ -58,7 +58,9 @@ public class Producer {
     public static void main(String[] args)
         throws IOException, InterruptedException {
         final Producer producer = new Producer();
-        producer.start(2);
+        Config setting = new SetupConfig().setup(args);
+
+        producer.start(setting);
         producer.blockUntilShutdown();
     }
 }
