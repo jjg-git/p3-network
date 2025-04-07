@@ -19,7 +19,15 @@ public class SetupConfig {
                 args[1]
             );
         }
+        if (config == null) {
+            config = readConfigFromFile();
+        }
 
         return config;
+    }
+    private Config readConfigFromFile() {
+
+        // Didn't get to read the file...
+        return null;
     }
 }
