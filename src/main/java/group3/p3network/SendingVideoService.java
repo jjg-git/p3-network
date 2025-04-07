@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 public class SendingVideoService
     extends SendingVideoServiceGrpc.SendingVideoServiceImplBase {
 
-    private final String videosPath = "server-dir/";
+    private final String videosPath = "producer-dir/";
 
     @Override
     public void sendVideo(
