@@ -54,9 +54,9 @@ public class Consumer {
             if (args.length == 1 && args[0].equals("--help")) {
                 System.err.println("Syntax: hostname:port");
                 System.err.println("");
-                System.err.println("   hostname  localhost or ip address in " +
+                System.err.println("    hostname  localhost or ip address in " +
                     "the format of XXX.XXX.XXX.XXX");
-                System.err.println("   port      port number");
+                System.err.println("    port      port number");
                 System.exit(1);
             }
             target = args[0];
