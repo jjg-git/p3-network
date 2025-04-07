@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 public class Consumer {
+    private static final String directory = "consumer-dir/";
+
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub;
 
@@ -63,7 +65,7 @@ public class Consumer {
         }
 
         System.out.println("test");
-        System.out.println(FileSystems.getDefault().getPath(""));
+        System.out.println(FileSystems.getDefault().getPath(directory));
 
         ManagedChannel channel = Grpc.newChannelBuilder(
             target,
