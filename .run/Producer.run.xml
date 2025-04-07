@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Producer" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="group3.p3network.Producer" />
+    <module name="p3-network" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

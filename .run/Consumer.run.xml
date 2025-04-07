@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Consumer" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="group3.p3network.Consumer" />
+    <module name="p3-network" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
