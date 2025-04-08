@@ -75,6 +75,9 @@ public class SetupConfig {
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write("threads " + threads + "\n");
             writer.write("connection " + port + "\n");
+
+            System.out.println("Created a configuration file in " +
+                configFile.getPath() + ".");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
