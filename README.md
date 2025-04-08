@@ -3,7 +3,7 @@
 ## Compile
 
 ### Requirements:
-1. JDK 24
+1. JDK 19
 2. Maven 3.9.9
 
 Clone the repository
