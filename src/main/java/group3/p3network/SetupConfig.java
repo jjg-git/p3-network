@@ -10,8 +10,8 @@ public class SetupConfig {
     private int port = 50051;
     private final String filename = "producer-config.txt";
 
-    public Config setup(String[] args) {
-        Config config = null;
+    public ProducerConfig setup(String[] args) {
+        ProducerConfig config = null;
 
         if (args.length > 0) {
             System.out.println("Taking from command line arguments...");
@@ -27,7 +27,7 @@ public class SetupConfig {
                 System.exit(1);
             }
 
-            config = new Config(
+            config = new ProducerConfig(
                 Integer.parseInt(args[0]),
                 Integer.parseInt(args[1])
             );
@@ -86,7 +86,7 @@ public class SetupConfig {
         }
     }
 
-    private Config readConfigFromFile() {
+    private ProducerConfig readConfigFromFile() {
         File configFile = loadConfigFile();
 
         try (BufferedReader reader =
@@ -96,7 +96,7 @@ public class SetupConfig {
         ){
             String line;
             ArrayList<String> lines = new ArrayList<>();
-            Config result;
+            ProducerConfig result;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
@@ -119,7 +119,7 @@ public class SetupConfig {
         return null;
     }
 
-    private Config handleThisLine(ArrayList<String> lines) {
+    private ProducerConfig handleThisLine(ArrayList<String> lines) {
         for (String line : lines) {
             String[] splitLine = line.split(" ");
 
@@ -143,7 +143,7 @@ public class SetupConfig {
             handleConfigs(optionToCheck, valueToCheck);
         }
 
-        return new Config(
+        return new ProducerConfig(
             threads,
             port
         );
