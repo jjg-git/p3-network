@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Consumer {
     private static String directory = "consumer-dir/";
+    private final static String defaultDirectory = directory;
 
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub;
