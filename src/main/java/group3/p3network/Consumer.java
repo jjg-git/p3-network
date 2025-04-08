@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Consumer {
     private static String directory = "consumer-dir/";
+    private static String target = "localhost:50051";
     private final static String defaultDirectory = directory;
 
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
@@ -53,21 +54,8 @@ public class Consumer {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String target = "localhost:50051";
         if (args.length > 0) {
-            if (args.length == 1 && args[0].equals("--help")) {
-                System.err.println("Syntax: hostname:port [output]");
-                System.err.println("");
-                System.err.println("    hostname  localhost or ip address in " +
-                    "the format of XXX.XXX.XXX.XXX");
-                System.err.println("    port      port number");
-                System.err.println("    output    name of the directory");
-                System.exit(1);
-            }
-            target = args[0];
-            if (args.length > 1) {
-                directory = args[1];
-            }
+            handleArgs(args);
         }
 
         if (!checkDirectory()) {
@@ -91,6 +79,22 @@ public class Consumer {
             consumer.getFiles(consumer.getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        }
+    }
+
+    private static void handleArgs(String[] args) {
+        if (args.length == 1 && args[0].equals("--help")) {
+            System.err.println("Syntax: hostname:port [output]");
+            System.err.println("");
+            System.err.println("    hostname  localhost or ip address in " +
+                "the format of XXX.XXX.XXX.XXX");
+            System.err.println("    port      port number");
+            System.err.println("    output    name of the directory");
+            System.exit(1);
+        }
+        target = args[0];
+        if (args.length > 1) {
+            directory = args[1];
         }
     }
 
