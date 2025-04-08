@@ -35,6 +35,10 @@ public class SetupConfig {
             config = readConfigFromFile();
         }
 
+        System.out.println("Configuration set:");
+        System.out.println("threads: " + threads);
+        System.out.println("port: " + port);
+
         return config;
     }
 
@@ -69,8 +73,8 @@ public class SetupConfig {
 
     private void writeDefaultConfigFile(File configFile) {
         try (FileWriter writer = new FileWriter(configFile)) {
-            writer.write("threads " + threads);
-            writer.write("connection " + port);
+            writer.write("threads " + threads + "\n");
+            writer.write("connection " + port + "\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
