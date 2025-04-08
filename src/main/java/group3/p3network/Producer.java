@@ -59,6 +59,7 @@ public class Producer {
         throws IOException, InterruptedException {
         final Producer producer = new Producer();
         Config setting = new SetupConfig().setup(args);
+        System.out.println(setting);
 
         producer.start(setting);
         producer.blockUntilShutdown();
