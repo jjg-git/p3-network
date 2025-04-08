@@ -14,6 +14,7 @@ public class SetupConfig {
         Config config = null;
 
         if (args.length > 0) {
+            System.out.println("Taking from command line arguments...");
             if (args[0].equals("--help")) {
                 showHelp();
                 System.exit(1);
@@ -32,7 +33,9 @@ public class SetupConfig {
             );
         }
         if (config == null) {
+            System.out.println("Reading the configuration file...");
             config = readConfigFromFile();
+            System.out.println("Read the configuration file.");
         }
 
         System.out.println("Configuration set:");
