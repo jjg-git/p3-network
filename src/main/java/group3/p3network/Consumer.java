@@ -84,12 +84,7 @@ public class Consumer {
 
     private static void handleArgs(String[] args) {
         if (args.length == 1 && args[0].equals("--help")) {
-            System.err.println("Syntax: hostname:port [output]");
-            System.err.println("");
-            System.err.println("    hostname  localhost or ip address in " +
-                "the format of XXX.XXX.XXX.XXX");
-            System.err.println("    port      port number");
-            System.err.println("    output    name of the directory");
+            showHelp();
             System.exit(1);
         }
         target = args[0];
@@ -101,6 +96,14 @@ public class Consumer {
     private static void makeDirectory() {
         System.err.println("Creating a directory named \"consumer-dir\" " +
             "where the videos will be downloaded.");
+    private static void showHelp() {
+        System.err.println("Syntax: hostname:port [output]");
+        System.err.println("");
+        System.err.println("    hostname  localhost or ip address in " +
+            "the format of XXX.XXX.XXX.XXX");
+        System.err.println("    port      port number");
+        System.err.println("    output    name of the directory");
+    }
 
     }
 
