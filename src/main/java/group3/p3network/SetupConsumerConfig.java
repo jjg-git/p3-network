@@ -10,8 +10,8 @@ public class SetupConsumerConfig {
     private int port = 50051;
     private final String filename = "consumer-config.txt";
 
-    public ProducerConfig setup(String[] args) {
-        ProducerConfig config = null;
+    public ConsumerConfig setup(String[] args) {
+        ConsumerConfig config = null;
 
         if (args.length > 0) {
             System.out.println("Taking from command line arguments...");
@@ -86,7 +86,7 @@ public class SetupConsumerConfig {
         }
     }
 
-    private ProducerConfig readConfigFromFile() {
+    private ConsumerConfig readConfigFromFile() {
         File configFile = loadConfigFile();
 
         try (BufferedReader reader =
@@ -96,7 +96,7 @@ public class SetupConsumerConfig {
         ){
             String line;
             ArrayList<String> lines = new ArrayList<>();
-            ProducerConfig result;
+            ConsumerConfig result;
 
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
@@ -119,7 +119,7 @@ public class SetupConsumerConfig {
         return null;
     }
 
-    private ProducerConfig handleThisLine(ArrayList<String> lines) {
+    private ConsumerConfig handleThisLine(ArrayList<String> lines) {
         for (String line : lines) {
             String[] splitLine = line.split(" ");
 
