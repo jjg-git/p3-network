@@ -57,9 +57,12 @@ public class Consumer {
     public static void main(String[] args) throws InterruptedException {
         if (args.length > 0) {
             handleArgs(args);
-        } else {
+        }
+
+        if (directory.equals(defaultDirectory)) {
             makeDefaultDirectory();
         }
+
 
         ManagedChannel channel = Grpc.newChannelBuilder(
             target,
@@ -94,8 +97,6 @@ public class Consumer {
                 System.out.println("Found \"" + directory + "\" directory.");
                 // System.exit(0);
             }
-        } else {
-            makeDefaultDirectory();
         }
     }
 
@@ -122,7 +123,6 @@ public class Consumer {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-        return;
     }
 
     private static boolean checkDirectory() {
