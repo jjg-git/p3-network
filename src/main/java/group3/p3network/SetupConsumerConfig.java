@@ -163,10 +163,22 @@ public class SetupConsumerConfig {
 
     private void handleConnection(String option, String valueToParse) {
         if (!option.equals("connection")) {
-            return;
+            handleDirectory(option, valueToParse);
         }
 
         parseConnection(valueToParse);
+    }
+
+    private void handleDirectory(String option, String valueToParse) {
+        if (!option.equals("output")) {
+            return;
+        }
+
+        parseDirectory(valueToParse);
+    }
+
+    private void parseDirectory(String valueToParse) {
+        directory = valueToParse;
     }
 
     private void parseThreads(String valueToParse) {
