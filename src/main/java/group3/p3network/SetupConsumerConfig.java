@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class SetupConsumerConfig {
     private int threads = 2;
     private int port = 50051;
-    private final String filename = "producer-config.txt";
+    private final String filename = "consumer-config.txt";
 
     public ProducerConfig setup(String[] args) {
         ProducerConfig config = null;
