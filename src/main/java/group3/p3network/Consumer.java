@@ -61,17 +61,6 @@ public class Consumer {
             makeDefaultDirectory();
         }
 
-        if (!checkDirectory()) {
-            System.err.println("Cannot find the directory " +
-                "named \"" + directory + "\".");
-
-            makeDirectory();
-            System.exit(1);
-        } else {
-            System.out.println("Found \"" + directory + "\" directory.");
-            // System.exit(0);
-        }
-
         ManagedChannel channel = Grpc.newChannelBuilder(
             target,
             InsecureChannelCredentials.create()
@@ -90,9 +79,23 @@ public class Consumer {
             showHelp();
             System.exit(1);
         }
+
         target = args[0];
+
         if (args.length > 1) {
             directory = args[1];
+
+            if (!checkDirectory()) {
+                System.err.println("Cannot find the directory " +
+                    "named \"" + directory + "\".");
+
+                System.exit(1);
+            } else {
+                System.out.println("Found \"" + directory + "\" directory.");
+                // System.exit(0);
+            }
+        } else {
+            makeDefaultDirectory();
         }
     }
 
