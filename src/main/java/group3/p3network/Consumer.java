@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
@@ -56,6 +57,8 @@ public class Consumer {
     public static void main(String[] args) throws InterruptedException {
         if (args.length > 0) {
             handleArgs(args);
+        } else {
+            makeDefaultDirectory();
         }
 
         if (!checkDirectory()) {
@@ -93,9 +96,6 @@ public class Consumer {
         }
     }
 
-    private static void makeDirectory() {
-        System.err.println("Creating a directory named \"consumer-dir\" " +
-            "where the videos will be downloaded.");
     private static void showHelp() {
         System.err.println("Syntax: hostname:port [output]");
         System.err.println("");
@@ -105,6 +105,21 @@ public class Consumer {
         System.err.println("    output    name of the directory");
     }
 
+    private static void makeDefaultDirectory() {
+        Path pathToDefaultDirectory = Path.of(defaultDirectory);
+
+        if (Files.exists(pathToDefaultDirectory)) {
+            return;
+        }
+
+        try {
+            System.err.println("Creating a directory named \""
+                + defaultDirectory + "\" where the videos will be downloaded.");
+            Files.createDirectory(pathToDefaultDirectory);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return;
     }
 
     private static boolean checkDirectory() {
