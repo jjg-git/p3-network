@@ -73,6 +73,7 @@ public class Consumer {
             System.err.println("Cannot find the directory " +
                 "named \"" + directory + "\".");
 
+            makeDirectory();
             System.exit(1);
         } else {
             System.out.println("Found \"" + directory + "\" directory.");
@@ -90,6 +91,12 @@ public class Consumer {
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
+    }
+
+    private static void makeDirectory() {
+        System.err.println("Creating a directory named \"consumer-dir\" " +
+            "where the videos will be downloaded.");
+
     }
 
     private static boolean checkDirectory() {
