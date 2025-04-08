@@ -2,6 +2,7 @@ package group3.p3network;
 
 import io.grpc.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 public class Consumer {
-    private static final String directory = "consumer-dir/";
+    private static String directory = "consumer-dir/";
 
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub;
@@ -54,18 +55,29 @@ public class Consumer {
         String target = "localhost:50051";
         if (args.length > 0) {
             if (args.length == 1 && args[0].equals("--help")) {
-                System.err.println("Syntax: hostname:port");
+                System.err.println("Syntax: hostname:port [output]");
                 System.err.println("");
                 System.err.println("    hostname  localhost or ip address in " +
                     "the format of XXX.XXX.XXX.XXX");
                 System.err.println("    port      port number");
+                System.err.println("    output    name of the directory");
                 System.exit(1);
             }
             target = args[0];
+            if (args.length > 1) {
+                directory = args[1];
+            }
         }
 
-        System.out.println("test");
-        System.out.println(FileSystems.getDefault().getPath(directory));
+        if (!checkDirectory()) {
+            System.err.println("Cannot find the directory " +
+                "named \"" + directory + "\".");
+
+            System.exit(1);
+        } else {
+            System.out.println("Found \"" + directory + "\" directory.");
+            // System.exit(0);
+        }
 
         ManagedChannel channel = Grpc.newChannelBuilder(
             target,
@@ -74,10 +86,13 @@ public class Consumer {
 
         try {
             Consumer consumer = new Consumer(channel);
-            // consumer.getVideos().forEach(System.out::println);
             consumer.getFiles(consumer.getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
+    }
+
+    private static boolean checkDirectory() {
+        return new File(directory).exists();
     }
 }
