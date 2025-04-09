@@ -14,23 +14,7 @@ public class SetupConsumerConfig {
         ConsumerConfig config = null;
 
         if (args.length > 0) {
-            System.out.println("Taking from command line arguments...");
-            if (args[0].equals("--help")) {
-                showHelp();
-                System.exit(1);
-            }
-
-            String portArg = args[1];
-
-            if (!portIsAvailable(args[1])) {
-                System.err.println("Port " + portArg + " is used");
-                System.exit(1);
-            }
-
-            config = new ProducerConfig(
-                Integer.parseInt(args[0]),
-                Integer.parseInt(args[1])
-            );
+            config = handleArgs(args);
         }
         if (config == null) {
             System.out.println("Reading the configuration file...");
@@ -45,6 +29,44 @@ public class SetupConsumerConfig {
         return config;
     }
 
+    private ConsumerConfig handleArgs(String[] args) {
+        if (args.length == 1 && args[0].equals("--help")) {
+            showHelp();
+            System.exit(1);
+        }
+
+        System.out.println("Taking from command line arguments...");
+        int threadArg = Integer.parseInt(args[0]);
+
+        String targetArg = args[1];
+
+        if (!networkAvailable(targetArg)) {
+            System.err.println("Target \"" + targetArg + "\" cannot be " +
+                "reached");
+            System.exit(1);
+        }
+
+        // There is an output argument
+        String directoryArg = defaultDirectory;
+        if (args.length == 3) {
+
+            directoryArg = args[2];
+            if (!checkDirectory(directoryArg)) {
+                System.err.println("Cannot find the directory " +
+                    "named \"" + directoryArg + "\".");
+
+                System.exit(1);
+            } else {
+                System.out.println("Found \"" + directoryArg + "\" directory.");
+            }
+        }
+
+        return new ConsumerConfig(
+            threadArg,
+            targetArg,
+            directoryArg
+        );
+    }
     private void showHelp() {
         System.err.println("Syntax: threads port\n");
         System.err.println("    threads  number of threads to run");
