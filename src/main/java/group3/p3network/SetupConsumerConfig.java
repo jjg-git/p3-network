@@ -1,6 +1,7 @@
 package group3.p3network;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -66,6 +67,8 @@ public class SetupConsumerConfig {
             } else {
                 System.out.println("Found \"" + directoryArg + "\" directory.");
             }
+        } else {
+            makeDefaultDirectory();
         }
 
         return new ConsumerConfig(
@@ -136,7 +139,8 @@ public class SetupConsumerConfig {
     private void writeDefaultConfigFile(File configFile) {
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write("threads " + threads + "\n");
-            writer.write("connection " + port + "\n");
+            writer.write("target " + target + "\n");
+            writer.write("directory " + defaultDirectory + "\n");
 
             System.out.println("Created a configuration file in " +
                 configFile.getPath() + ".");
@@ -202,9 +206,10 @@ public class SetupConsumerConfig {
             handleConfigs(optionToCheck, valueToCheck);
         }
 
-        return new ProducerConfig(
+        return new ConsumerConfig(
             threads,
-            port
+            target,
+            directory
         );
     }
 
@@ -245,7 +250,7 @@ public class SetupConsumerConfig {
     }
 
     private void parseConnection(String valueToParse) {
-        port = Integer.parseInt(valueToParse);
+        target = valueToParse;
     }
 
 
@@ -254,7 +259,8 @@ public class SetupConsumerConfig {
 
         CheckArg() {
             neededOptions.put("threads", int.class);
-            neededOptions.put("connection", String.class);
+            neededOptions.put("target", String.class);
+            neededOptions.put("directory", String.class);
         }
 
         public boolean thisOption(String optionToFind) {
