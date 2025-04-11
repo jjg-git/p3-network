@@ -24,7 +24,8 @@ public class SetupConsumerConfig {
 
         System.out.println("Configuration set:");
         System.out.println("threads: " + threads);
-        System.out.println("port: " + port);
+        System.out.println("target: " + target);
+        System.out.println("directory: " + directory);
 
         return config;
     }
