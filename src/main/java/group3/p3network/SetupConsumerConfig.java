@@ -2,6 +2,9 @@ package group3.p3network;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -71,6 +74,35 @@ public class SetupConsumerConfig {
             directoryArg
         );
     }
+
+    private void makeDefaultDirectory() {
+        Path pathToDefaultDirectory = Path.of(defaultDirectory);
+
+        if (Files.exists(pathToDefaultDirectory)) {
+            return;
+        }
+
+        try {
+            System.err.println("Creating a directory named \""
+                + defaultDirectory + "\" where the videos will be downloaded.");
+            Files.createDirectory(pathToDefaultDirectory);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private boolean checkDirectory(String directory) {
+        return new File(directory).exists();
+    }
+
+    private boolean networkAvailable(String targetArg) {
+        try {
+            return InetAddress.getByName(targetArg) != null;
+        } catch (UnknownHostException e) {
+            return false;
+        }
+    }
+
     private void showHelp() {
         System.err.println("Syntax: hostname:port [directory]\n");
         System.err.println("    hostname  localhost or ip address in " +
