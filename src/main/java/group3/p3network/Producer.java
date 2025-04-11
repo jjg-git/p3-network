@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class Producer {
     private Server server;
 
-    private void start(Config setting) throws IOException {
+    private void start(ProducerConfig setting) throws IOException {
         final int port = setting.port();
 
         ExecutorService executor =
@@ -58,7 +58,8 @@ public class Producer {
     public static void main(String[] args)
         throws IOException, InterruptedException {
         final Producer producer = new Producer();
-        Config setting = new SetupConfig().setup(args);
+        ProducerConfig setting = new SetupConfig().setup(args);
+        System.out.println(setting);
 
         producer.start(setting);
         producer.blockUntilShutdown();

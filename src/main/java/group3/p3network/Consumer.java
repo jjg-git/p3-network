@@ -2,7 +2,6 @@ package group3.p3network;
 
 import io.grpc.*;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -12,8 +11,6 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class Consumer {
-    private static final String directory = "consumer-dir/";
-
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub;
 
@@ -21,9 +18,7 @@ public class Consumer {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
-
-
-    public void getFiles(Iterator<VideoInfo> videos) {
+    public void getFiles(ConsumerConfig setting, Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
         ExecutorService executor = Executors.newFixedThreadPool(4);
         List<Future<?>> futures = new ArrayList<>();
@@ -36,7 +31,8 @@ public class Consumer {
                 System.out.println("Reading " + info.getFilename() +
                         " (" + info.getFilesize() + ")...");
 
-                try (FileOutputStream os = new FileOutputStream(info.getFilename())) {
+                String filename = setting.output() + info.getFilename();
+                try (FileOutputStream os = new FileOutputStream(filename)) {
                     Iterator<VideoData> streamedData = blockingStub.sendVideo(info);
                     while (streamedData.hasNext()) {
                         VideoData data = streamedData.next();
@@ -67,33 +63,19 @@ public class Consumer {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String target = "localhost:50051";
-        if (args.length > 0) {
-            if (args.length == 1 && args[0].equals("--help")) {
-                System.err.println("Syntax: hostname:port");
-                System.err.println("");
-                System.err.println("    hostname  localhost or ip address in " +
-                    "the format of XXX.XXX.XXX.XXX");
-                System.err.println("    port      port number");
-                System.exit(1);
-            }
-            target = args[0];
-        }
-
-        System.out.println("test");
-        System.out.println(FileSystems.getDefault().getPath(directory));
+        ConsumerConfig setting = new SetupConsumerConfig().setup(args);
 
         ManagedChannel channel = Grpc.newChannelBuilder(
-            target,
+            setting.target(),
             InsecureChannelCredentials.create()
         ).build();
 
         try {
             Consumer consumer = new Consumer(channel);
-            // consumer.getVideos().forEach(System.out::println);
-            consumer.getFiles(consumer.getVideos());
+            consumer.getFiles(setting, consumer.getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
     }
+
 }
