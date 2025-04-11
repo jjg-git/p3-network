@@ -7,7 +7,10 @@ import java.util.HashMap;
 
 public class SetupConsumerConfig {
     private int threads = 2;
-    private int port = 50051;
+    private String target = "localhost:50051";
+    private final String defaultDirectory = "consumer-dir/";
+    private String directory = defaultDirectory;
+
     private final String filename = "consumer-config.txt";
 
     public ConsumerConfig setup(String[] args) {
