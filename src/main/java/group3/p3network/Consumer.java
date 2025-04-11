@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Consumer {
     private static final String directory = "consumer-dir/";
@@ -19,31 +21,45 @@ public class Consumer {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
+
+
     public void getFiles(Iterator<VideoInfo> videos) {
-        Iterator<VideoData> streamedData;
-        for (Iterator<VideoInfo> it = videos; it.hasNext(); ) {
-            VideoInfo info = it.next();
-            System.out.println("Reading " + info.getFilename() +
-                "(" + info.getFilesize() + ")...");
+        // Use a fixed thread pool with, say, 4 threads (tweak as needed)
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        List<Future<?>> futures = new ArrayList<>();
 
-            try {
-                FileOutputStream os = new FileOutputStream(info.getFilename());
+        while (videos.hasNext()) {
+            VideoInfo info = videos.next();
 
-                streamedData = blockingStub.sendVideo(info);
-                for (int i = 0; streamedData.hasNext(); i++) {
-                    VideoData data = streamedData.next();
-                    os.write(data.getData().toByteArray());
+            // Submit each video download as a separate task
+            Future<?> future = executor.submit(() -> {
+                System.out.println("Reading " + info.getFilename() +
+                        " (" + info.getFilesize() + ")...");
+
+                try (FileOutputStream os = new FileOutputStream(info.getFilename())) {
+                    Iterator<VideoData> streamedData = blockingStub.sendVideo(info);
+                    while (streamedData.hasNext()) {
+                        VideoData data = streamedData.next();
+                        os.write(data.getData().toByteArray());
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error downloading " + info.getFilename() + ": " + e.getMessage());
                 }
+            });
 
-                os.close();
-            } catch (StatusRuntimeException e) {
-                System.err.println(e.getMessage());
-            } catch (FileNotFoundException e) {
-                System.err.println(e.getMessage());
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
+            futures.add(future);
+        }
+
+        // Optional: Wait for all tasks to finish
+        for (Future<?> future : futures) {
+            try {
+                future.get(); // This will throw if any task failed
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
+        executor.shutdown();
     }
 
     public Iterator<VideoInfo> getVideos() {
