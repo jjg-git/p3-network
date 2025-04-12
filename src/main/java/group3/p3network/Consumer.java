@@ -20,7 +20,8 @@ public class Consumer {
 
     public void getFiles(ConsumerConfig setting, Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService executor =
+            Executors.newFixedThreadPool(setting.threads());
         List<Future<?>> futures = new ArrayList<>();
 
         while (videos.hasNext()) {
