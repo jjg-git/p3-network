@@ -1,6 +1,11 @@
 package group3.p3network;
 
 import io.grpc.*;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -61,20 +66,18 @@ public class Consumer {
         return blockingStub.listVideo(Commands.ListVideos);
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        ConsumerConfig setting = new SetupConsumerConfig().setup(args);
+    @Override
+    public void start(Stage stage){
+        String javaVersion = System.getProperty("java.version");
+        String javafxVersion = System.getProperty("javafx.version");
+        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+        Scene mainScene = new Scene(new StackPane(l), 640, 480);
+        stage.setScene(mainScene);
+        stage.show();
+    }
 
-        ManagedChannel channel = Grpc.newChannelBuilder(
-            setting.target(),
-            InsecureChannelCredentials.create()
-        ).build();
-
-        try {
-            Consumer consumer = new Consumer(channel);
-            consumer.getFiles(setting, consumer.getVideos());
-        } finally {
-            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        }
+    public static void main(String[] args){
+        launch();
     }
 
     private static void connectGrpc(String[] args) throws InterruptedException {
