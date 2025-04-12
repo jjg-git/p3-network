@@ -92,6 +92,12 @@ public class Consumer extends Application {
             InsecureChannelCredentials.create()
         ).build();
 
+    }
+
+    private static void connectChannel(
+        ConsumerConfig setting,
+        ManagedChannel channel
+    ) throws InterruptedException {
         try {
             Consumer consumer = new Consumer(channel);
             consumer.getFiles(setting, consumer.getVideos());
