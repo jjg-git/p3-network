@@ -21,6 +21,8 @@ public class Consumer extends Application {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
+    public Consumer() {}
+
     public void getFiles(ConsumerConfig setting, Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
         ExecutorService executor =
