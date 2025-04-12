@@ -14,19 +14,7 @@ public class MainController {
     private GridPane videoGrid;
 
     public void initialize() throws IOException {
-        int maxRow = videoGrid.getRowCount();
-        int maxCol = videoGrid.getColumnCount();
 
-        for (int i = 0; i < maxRow; i++) {
-            for (int j = 0; j < maxCol; j++) {
-
-                VBox loadingCell = FXMLLoader.load(
-                    getClass().getResource("loadingCell.fxml")
-                );
-
-                videoGrid.add(loadingCell, i, j);
-            }
-        }
     }
 
     @FXML
