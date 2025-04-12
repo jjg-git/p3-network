@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.*;
 
 public class Consumer extends Application {
-    private SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
+    private static SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub = null;
     private static ConsumerConfig setting = null;
     private static ManagedChannel channel = null;
@@ -27,7 +27,8 @@ public class Consumer extends Application {
 
     public Consumer() {}
 
-    public void getFiles(ConsumerConfig setting, Iterator<VideoInfo> videos) {
+    public static void getFiles(ConsumerConfig setting,
+                            Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
         ExecutorService executor =
             Executors.newFixedThreadPool(setting.threads());
@@ -95,6 +96,7 @@ public class Consumer extends Application {
             InsecureChannelCredentials.create()
         ).build();
 
+        blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
     }
 
     private static void connectChannel(
