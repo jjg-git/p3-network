@@ -3,8 +3,6 @@ package group3.p3network;
 import io.grpc.*;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
