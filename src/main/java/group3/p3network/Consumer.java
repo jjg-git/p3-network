@@ -21,10 +21,6 @@ public class Consumer extends Application {
     private static ConsumerConfig setting = null;
     private static ManagedChannel channel = null;
 
-    public Consumer(ManagedChannel channel) {
-        this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
-    }
-
     public Consumer() {}
 
     public static void getFiles(ConsumerConfig setting,
