@@ -18,6 +18,7 @@ import java.util.concurrent.*;
 public class Consumer extends Application {
     private SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub = null;
+    private static ConsumerConfig setting = null;
 
     public Consumer(ManagedChannel channel) {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
@@ -85,7 +86,7 @@ public class Consumer extends Application {
     }
 
     private static void connectGrpc(String[] args) throws InterruptedException {
-        ConsumerConfig setting = new SetupConsumerConfig().setup(args);
+        setting = new SetupConsumerConfig().setup(args);
 
         ManagedChannel channel = Grpc.newChannelBuilder(
             setting.target(),
