@@ -1,22 +1,29 @@
 package group3.p3network;
 
 import io.grpc.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.*;
 
-public class Consumer {
-    private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
-        blockingStub;
+public class Consumer extends Application {
+    private static SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
+        blockingStub = null;
+    private static ConsumerConfig setting = null;
+    private static ManagedChannel channel = null;
 
-    public Consumer(ManagedChannel channel) {
-        this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
-    }
+    public Consumer() {}
 
-    public void getFiles(ConsumerConfig setting, Iterator<VideoInfo> videos) {
+    public static void getFiles(Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
         ExecutorService executor =
             Executors.newFixedThreadPool(setting.threads());
@@ -57,24 +64,50 @@ public class Consumer {
         executor.shutdown();
     }
 
-    public Iterator<VideoInfo> getVideos() {
+    public static Iterator<VideoInfo> getVideos() {
         return blockingStub.listVideo(Commands.ListVideos);
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        ConsumerConfig setting = new SetupConsumerConfig().setup(args);
+    @Override
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(
+            Objects.requireNonNull(
+                getClass().getResource("mainWindow.fxml")));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-        ManagedChannel channel = Grpc.newChannelBuilder(
+    public static void main(String[] args) throws InterruptedException {
+        connectGrpc(args);
+        getFiles(getVideos());
+        launch();
+    }
+
+    private static void connectGrpc(String[] args) throws InterruptedException {
+        setting = new SetupConsumerConfig().setup(args);
+
+        channel = Grpc.newChannelBuilder(
             setting.target(),
             InsecureChannelCredentials.create()
         ).build();
 
+        blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
+    }
+
+    private static void connectChannel(
+        ConsumerConfig setting,
+        ManagedChannel channel
+    ) throws InterruptedException {
         try {
-            Consumer consumer = new Consumer(channel);
-            consumer.getFiles(setting, consumer.getVideos());
+            getFiles(getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
+    }
+
+    public static ConsumerConfig getSetting() {
+        return setting;
     }
 
 }
