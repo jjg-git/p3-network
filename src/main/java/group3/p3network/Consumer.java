@@ -2,15 +2,17 @@ package group3.p3network;
 
 import io.grpc.*;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 public class Consumer extends Application {
@@ -69,12 +71,12 @@ public class Consumer extends Application {
     }
 
     @Override
-    public void start(Stage stage){
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        Scene mainScene = new Scene(new StackPane(l), 640, 480);
-        stage.setScene(mainScene);
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(
+            Objects.requireNonNull(
+                getClass().getResource("mainWindow.fxml")));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
         stage.show();
     }
 
