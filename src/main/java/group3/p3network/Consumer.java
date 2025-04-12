@@ -64,7 +64,7 @@ public class Consumer extends Application {
         executor.shutdown();
     }
 
-    public Iterator<VideoInfo> getVideos() {
+    public static Iterator<VideoInfo> getVideos() {
         return blockingStub.listVideo(Commands.ListVideos);
     }
 
@@ -99,8 +99,7 @@ public class Consumer extends Application {
         ManagedChannel channel
     ) throws InterruptedException {
         try {
-            Consumer consumer = new Consumer(channel);
-            consumer.getFiles(setting, consumer.getVideos());
+            getFiles(getVideos());
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
