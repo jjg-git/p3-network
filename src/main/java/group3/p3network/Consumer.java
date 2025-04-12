@@ -19,6 +19,7 @@ public class Consumer extends Application {
     private SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub = null;
     private static ConsumerConfig setting = null;
+    private static ManagedChannel channel = null;
 
     public Consumer(ManagedChannel channel) {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
@@ -81,14 +82,15 @@ public class Consumer extends Application {
         stage.show();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
+        connectGrpc(args);
         launch();
     }
 
     private static void connectGrpc(String[] args) throws InterruptedException {
         setting = new SetupConsumerConfig().setup(args);
 
-        ManagedChannel channel = Grpc.newChannelBuilder(
+        channel = Grpc.newChannelBuilder(
             setting.target(),
             InsecureChannelCredentials.create()
         ).build();
