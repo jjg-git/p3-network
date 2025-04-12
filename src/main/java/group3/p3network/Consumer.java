@@ -23,8 +23,7 @@ public class Consumer extends Application {
 
     public Consumer() {}
 
-    public static void getFiles(ConsumerConfig setting,
-                            Iterator<VideoInfo> videos) {
+    public static void getFiles(Iterator<VideoInfo> videos) {
         // Use a fixed thread pool with, say, 4 threads (tweak as needed)
         ExecutorService executor =
             Executors.newFixedThreadPool(setting.threads());
