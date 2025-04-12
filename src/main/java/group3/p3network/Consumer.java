@@ -16,6 +16,7 @@ import java.util.concurrent.*;
 public class Consumer {
     private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
         blockingStub;
+public class Consumer extends Application {
 
     public Consumer(ManagedChannel channel) {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
