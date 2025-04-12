@@ -77,4 +77,20 @@ public class Consumer {
         }
     }
 
+    private static void connectGrpc(String[] args) throws InterruptedException {
+        ConsumerConfig setting = new SetupConsumerConfig().setup(args);
+
+        ManagedChannel channel = Grpc.newChannelBuilder(
+            setting.target(),
+            InsecureChannelCredentials.create()
+        ).build();
+
+        try {
+            Consumer consumer = new Consumer(channel);
+            consumer.getFiles(setting, consumer.getVideos());
+        } finally {
+            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        }
+    }
+
 }
