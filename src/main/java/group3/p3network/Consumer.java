@@ -80,6 +80,7 @@ public class Consumer extends Application {
 
     public static void main(String[] args) throws InterruptedException {
         connectGrpc(args);
+        getFiles(getVideos());
         launch();
     }
 
@@ -103,6 +104,10 @@ public class Consumer extends Application {
         } finally {
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
+    }
+
+    public static ConsumerConfig getSetting() {
+        return setting;
     }
 
 }
