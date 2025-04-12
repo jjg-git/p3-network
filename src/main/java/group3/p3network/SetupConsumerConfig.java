@@ -107,7 +107,8 @@ public class SetupConsumerConfig {
     }
 
     private void showHelp() {
-        System.err.println("Syntax: hostname:port [directory]\n");
+        System.err.println("Syntax: threads hostname:port [directory]\n");
+        System.err.println("    threads   number of threads to run");
         System.err.println("    hostname  localhost or ip address in " +
             "the format of XXX.XXX.XXX.XXX");
         System.err.println("    port      port number");
