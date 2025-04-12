@@ -90,7 +90,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>HelloFX</mainClass>
+                    <mainClass>group3.p3network.Consumer</mainClass>
                 </configuration>
             </plugin>
         </plugins>
