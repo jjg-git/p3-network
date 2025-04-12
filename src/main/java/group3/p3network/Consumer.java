@@ -13,10 +13,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class Consumer {
-    private final SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
-        blockingStub;
 public class Consumer extends Application {
+    private SendingVideoServiceGrpc.SendingVideoServiceBlockingStub
+        blockingStub = null;
 
     public Consumer(ManagedChannel channel) {
         this.blockingStub = SendingVideoServiceGrpc.newBlockingStub(channel);
